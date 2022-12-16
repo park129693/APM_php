@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  php:
+    container_name: php
+    image: php_apache:latest
+    working_dir: /var/www/html
+    volumes:
+      - "./html/:/var/www/html"
+      - "./files:/var/www/html/files"
+    ports:
+      - 80:80
+    depends_on:
+      - mariadb
+
+  mariadb:
+    container_name: mariadb
+    image: mariadb:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpw
+      - MYSQL_USER=user0
+      - MYSQL_PASSWORD=1234
+      - MYSQL_DATABASE=csv
+      # - MYSQL_DATABASE=user
+    volumes:
+      - "./mariadb/conf.d/:/etc/mysql/conf.d"
+      - "./mariadb/data:/var/lib/mysql"
+      - "./mariadb/initdb.d:/docker-entrypoint-initdb.d"
+    ports:
+      - 3306:3306
+
+      
